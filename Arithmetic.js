@@ -1,23 +1,45 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
-
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
+  Template.quiz.events({
+    'click #nq': function(){
+      Meteor.call("generateQuestion", function(err, data){
+        if (err){
+          console.log(err);
+        }
+        console.log(data.question);
+        console.log(data.answer);
+        Session.set('question', data.question);
+      });
     }
   });
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
+  Template.quiz.helpers({
+    'question': function(){
+      return Session.get('question');
     }
   });
 }
 
 if (Meteor.isServer) {
+  var maxQuestionNumber = 10;
+  var minQuestionNumber = 1;
   Meteor.startup(function () {
-    // code to run on server at startup
+    console.log("Running! :)")
+  });
+  Meteor.methods({
+    'generateQuestion': function(){
+        var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
+        var questionPart2 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
+        var rndbool = Math.random() >= 0.5;
+        var result = {};
+        if(rndbool){
+          result.question = questionPart1 + " + " + questionPart2;
+          result.answer = questionPart1 + questionPart2;
+          return result;
+        } else {
+          result.question = questionPart1 + " - " + questionPart2;
+          result.answer = questionPart1 - questionPart2;
+          return result;
+        }
+      }
   });
 }

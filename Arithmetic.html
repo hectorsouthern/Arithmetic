@@ -3,12 +3,19 @@
 </head>
 
 <body>
-  <h1>Arithmatic Quiz</h1>
-  {{> main-menu}}
+  <h1>Arithmetic Quiz</h1>
 </body>
 
 <template name="main-menu">
-  <button id="newquiz">Begin New Quiz</button>
+  <a href="/quiz"><button id="newquiz">Begin New Quiz</button></a>
   <button id="pastresults">View Past Results</button>
   <button id="teacherarea">Teacher Area</button>
+</template>
+<template name="quiz">
+  {{question}}
+  <button id='nq'>New Question</button>
+  <form>
+    <input type="text" name="answer">
+    <input type="submit" value="Submit">
+  </form>
 </template>
