@@ -3,12 +3,12 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
+  <h1>Arithmatic Quiz</h1>
+  {{> main-menu}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="main-menu">
+  <button id="newquiz">Begin New Quiz</button>
+  <button id="pastresults">View Past Results</button>
+  <button id="teacherarea">Teacher Area</button>
 </template>
