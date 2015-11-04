@@ -12,10 +12,12 @@
   <button id="teacherarea">Teacher Area</button>
 </template>
 <template name="quiz">
+  <h2>Question #{{questionNum}}</h2>
   {{question}}
   <button id='nq'>New Question</button>
-  <form>
+  <form id='answer'>
     <input type="text" name="answer">
     <input type="submit" value="Submit">
   </form>
+  {{feedback}}
 </template>
