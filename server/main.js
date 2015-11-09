@@ -19,7 +19,7 @@ Meteor.methods({
   'submitAnswers': function(array){
     Data.insert({
       name: "TODO",
-      date: new Date(),
+      date: new Date().toISOString(),
       q1: [array[0][0],array[0][1]],
       q2: [array[1][0],array[1][1]],
       q3: [array[2][0],array[2][1]],

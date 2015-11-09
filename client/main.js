@@ -76,5 +76,11 @@ addToAnswerLog = function(var1, var2){
 Template.results.helpers({
   'data': function(){
     return Session.get('answerLog');
+  },
+  'settings': function(){
+    return {
+      showFilter: false,
+      fields: ['Question', 'Answer']
+    };
   }
 });
