@@ -23,8 +23,6 @@ Template.quiz.events({
     } else if (userAnswer.match(/[a-z]/i)) {
       console.log('Invalid Input!');
     } else {
-      console.log('Submitted: ' + userAnswer);
-      console.log('Expecting: ' + eval(Session.get('question')));
       if(userAnswer == eval(Session.get('question'))){
         Session.set('feedback', 'Correct!');
       } else {
@@ -81,6 +79,7 @@ Template.results.helpers({
       showNavigation: 'never',
       collection: tableData.data,
       showNavigationRowsPerPage: false,
+      rowClass: getRowClass,
       fields: [
         {key: '0', label: 'Question', sortable: false},
         {key: '1', label: 'Your Answer', sortable: false},
@@ -100,13 +99,19 @@ getTableData = function(){
     var array = Session.get('answerLog');
     var wrongAns = 0;
     for (var i = 0; i < array.length; i++) {
-      console.log(array[i][0] + " " + array[i][1]);
       if(eval(array[i][0]) != array[i][1]){
-        console.log("Wrong");
         array[i].push(eval(array[i][0]))
         wrongAns++;
       }
     }
     var tableData = {data: array, wrongAns: wrongAns};
     return tableData;
+}
+
+getRowClass = function(element){
+  if(eval(element[0]) != element[1]){
+    return "danger";
+  } else {
+    return "success";
+  }
 }
