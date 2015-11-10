@@ -74,13 +74,39 @@ addToAnswerLog = function(var1, var2){
 //TEMPLATE 'RESULTS'
 
 Template.results.helpers({
-  'data': function(){
-    return Session.get('answerLog');
-  },
   'settings': function(){
+    var tableData = getTableData();
     return {
       showFilter: false,
-      fields: ['Question', 'Answer']
+      showNavigation: 'never',
+      collection: tableData.data,
+      showNavigationRowsPerPage: false,
+      fields: [
+        {key: '0', label: 'Question', sortable: false},
+        {key: '1', label: 'Your Answer', sortable: false},
+        {key: '2', label: 'Correct Answer', sortable: false, hidden: function() {
+          if(tableData.wrongAns == 0){
+            return true;
+          } else {
+            return false;
+          }
+        }}
+      ]
     };
   }
 });
+
+getTableData = function(){
+    var array = Session.get('answerLog');
+    var wrongAns = 0;
+    for (var i = 0; i < array.length; i++) {
+      console.log(array[i][0] + " " + array[i][1]);
+      if(eval(array[i][0]) != array[i][1]){
+        console.log("Wrong");
+        array[i].push(eval(array[i][0]))
+        wrongAns++;
+      }
+    }
+    var tableData = {data: array, wrongAns: wrongAns};
+    return tableData;
+}
