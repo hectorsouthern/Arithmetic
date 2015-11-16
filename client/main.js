@@ -4,6 +4,9 @@ Session.set('answerLog', []);
 //TEMPLATE 'QUIZ'
 
 Template.quiz.rendered = function(){
+  if(!Meteor.user()){
+    Router.go('login');
+  }
   if(!this.rendered){
     this._rendered = true;
     nextQuestion(true);
@@ -30,7 +33,7 @@ Template.quiz.events({
       }
       addToAnswerLog(Session.get('question'), userAnswer);
       if(Session.get('questionNum') >= 10){
-        Meteor.call('submitAnswers', Session.get('answerLog'));
+        Meteor.call('submitAnswers', Session.get('answerLog'), Meteor.userId(), Meteor.user().username);
         Router.go('results');
       } else {
         nextQuestion();
@@ -115,3 +118,50 @@ getRowClass = function(element){
     return "success";
   }
 }
+
+Template.login.events({
+  'submit #login-form' : function(e, t){
+    e.preventDefault();
+    // retrieve the input field values
+    var email = t.find('#login-email').value
+      , password = t.find('#login-password').value;
+
+      // Trim and validate your fields here....
+
+      // If validation passes, supply the appropriate fields to the
+      // Meteor.loginWithPassword() function.
+      Meteor.loginWithPassword(email, password, function(err){
+      if (err) {
+        // The user might not have been found, or their passwword
+        // could be incorrect. Inform the user that their
+        // login attempt has failed.
+      }
+      else {
+        console.log('Login Success');
+        Router.go('/');
+    }});
+       return false;
+    }
+});
+
+Template.register.events({
+    'submit #register-form' : function(e, t) {
+      e.preventDefault();
+      var email = t.find('#account-email').value
+        , password = t.find('#account-password').value;
+
+        // Trim and validate the input
+
+      Accounts.createUser({email: email, password : password}, function(err){
+          if (err) {
+            // Inform the user that account creation failed
+          } else {
+            console.log("User created");
+            Router.go('login');
+          }
+
+        });
+
+      return false;
+    }
+  });

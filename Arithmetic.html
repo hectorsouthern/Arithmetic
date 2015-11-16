@@ -5,11 +5,10 @@
 <body>
   <h1>Arithmetic Quiz</h1>
 </body>
-
 <template name="main-menu">
-  <a href="/quiz"><button id="newquiz">Begin New Quiz</button></a>
-  <button id="pastresults">View Past Results</button>
-  <button id="teacherarea">Teacher Area</button>
+    <a href="/quiz"><button id="newquiz">Begin New Quiz</button></a>
+    <button id="pastresults">View Past Results</button>
+    <button id="teacherarea">Teacher Area</button>
 </template>
 <template name="quiz">
   <h2>Question #{{questionNum}}</h2>
@@ -24,4 +23,22 @@
 <template name="results">
   <h2>Results</h2>
   {{> reactiveTable settings=settings class="table table-bordered table-hover"}}
+</template>
+<template name="login">
+  <form id="login-form" action="action">
+      <div>
+        <input type="email" id="login-email" />
+        <input type="password" id="login-password" />
+        <input type="submit" id="login-button" value="Sign in" />
+     </div>
+   </form>
+</template>
+<template name='register'>
+  <form id="register-form" action="action">
+    <div>
+     <input type="email" id="account-email" />
+     <input type="password" id="account-password" />
+     <input type="submit" id="create-account" value="Create an Account" />
+   </div>
+ </form>
 </template>

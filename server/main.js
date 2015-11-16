@@ -16,9 +16,10 @@ Meteor.methods({
       return (questionPart1 + " - " + questionPart2);
     }
   },
-  'submitAnswers': function(array){
+  'submitAnswers': function(array, userId, username){
     Data.insert({
-      name: "TODO",
+      userId: userId,
+      username: username,
       date: new Date().toISOString(),
       q1: [array[0][0],array[0][1]],
       q2: [array[1][0],array[1][1]],
