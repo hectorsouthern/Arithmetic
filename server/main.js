@@ -32,5 +32,24 @@ Meteor.methods({
       q9: [array[8][0],array[8][1]],
       q10: [array[9][0],array[9][1]]
     });
+  },
+  'createNewUser': function(username, password, role){
+    if (!Roles.userIsInRole(this.userId, ['teacher'])){
+      throw new Meteor.Error('Invalid Rights.', 'Only teachers can create new users.');
+    }
+    var id = Accounts.createUser({username: username, password: password}){
+      if(err){
+        return err.reason;
+      } else {
+      Roles.addUsersToRoles(id, role);
+      }
+    });
+  },
+  'addUserToRole': function(username, role){
+    console.log(username + " " + group);
+    Roles.addUsersToRoles(Accounts.findUserByUsername(username), role);
+  },
+  'getRolesForUser': function(id){
+    return Roles.getRolesForUser(id);
   }
 });

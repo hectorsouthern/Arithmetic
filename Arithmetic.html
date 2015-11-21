@@ -5,11 +5,16 @@
 <body>
   <h1>Arithmetic Quiz</h1>
 </body>
+
 <template name="main-menu">
+    <p>
+    {{> loginButtons}}
+    </p>
     <a href="/quiz"><button id="newquiz">Begin New Quiz</button></a>
     <button id="pastresults">View Past Results</button>
     <a href="/admin"><button id="teacherarea">Teacher Area</button></a>
 </template>
+
 <template name="quiz">
   <h2>Question #{{questionNum}}</h2>
   {{question}}
@@ -20,10 +25,12 @@
   </form>
   {{feedback}}
 </template>
+
 <template name="results">
   <h2>Results</h2>
   {{> reactiveTable settings=settings class="table table-bordered table-hover"}}
 </template>
+
 <template name="login">
   <form id="login-form" action="action">
       <div>
@@ -33,6 +40,7 @@
      </div>
    </form>
 </template>
+
 <template name='admin'>
   <form id="new-user-form" action="action">
     <div>
@@ -41,21 +49,39 @@
       </p>
      <input type="username" id="account-username" />
      <input type="password" id="account-password" />
-     <input type="text" id="account-role" />
+     <select id='account-role'>
+       <option value="teacher">Teacher</option>
+       <option value="student">Student</option>
+     </select>
      <input type="submit" id="create-account" value="Create account" />
      <p>
-       {{newuserfeedback}}
+       {{newUserFeedback}}
      </p>
    </div>
  </form>
+ <form id="move-user-form" action="action">
+   <div>
+     <p>
+       <h3>Add user to group</h3>
+     </p>
+    <input type="username" id="move-username" />
+    <input type="text" id="group" />
+    <input type="submit" id="add-user-to-group" value="Submit" />
+    <p>
+      {{moveToGroupFeedback}}
+    </p>
+  </div>
+</form>
 </template>
+
 <template name='userlist'>
 {{#each users}}
   {{> user}}
 {{/each}}
 </template>
+
 <template name="user">
   <li class="list-group-item">
-    {{username}}: {{group}}
+    {{username}}: {{group _id}}
   </li>
 </template>

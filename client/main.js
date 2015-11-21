@@ -1,6 +1,10 @@
 Session.set('questionNum', 1);
 Session.set('answerLog', []);
 
+Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_ONLY'
+});
+
 //TEMPLATE 'QUIZ'
 
 Template.quiz.rendered = function(){
@@ -10,6 +14,7 @@ Template.quiz.rendered = function(){
   if(!this.rendered){
     this._rendered = true;
     nextQuestion(true);
+    Session.set('newUserFeedback', '');
   }
 };
 
@@ -147,30 +152,40 @@ Template.login.events({
 //TEMPLATE 'ADMIN'
 
 Template.admin.helpers({
-  'newuserfeedback': function(){
-    return Session.get('newuserfeedback');
+  'newUserFeedback': function(){
+    return Session.get('newUserFeedback');
+  },
+  'moveToGroupFeedback': function(){
+    return Session.get('moveToGroupFeedback')
   }
 });
 
 Template.admin.events({
     'submit #new-user-form' : function(e, t) {
+      console.log(t);
       e.preventDefault();
       var username = t.find('#account-username').value;
       var password = t.find('#account-password').value;
       var role = t.find('#account-role').value;
-      Accounts.createUser({username: username, password: password}, function(err){
-          if (err) {
-            Session.set('newuserfeedback', err.reason);
-          } else {
-            console.log("User created");
-            Session.set('newuserfeedback', "User Created");
-            t.find('#account-username').value = '';
-            t.find('#account-password').value = '';
-            t.find('#account-role').value = '';
-            Roles.addUserstoRoles(Meteor.users.find({}, fields: {username: username}), 'admin', 'default-group');
-          }
-        });
-      return false;
+      if (username.length < 1){
+        Session.set('newUserFeedback', 'You must provide a valid username.')
+        //TODO further username validation
+        return false;
+      } else if(password.length < 1){
+        Session.set('newUserFeedback', 'You must provide a valid password.')
+        //TODO further password validation
+        return false;
+      } else if(role.length < 1){
+        Session.set('newUserFeedback', 'You must set a role for this user.')
+        return false;
+      }
+      Meteor.call('createNewUser',{username: username, password: password, role: role}, function(error){
+        if(error){
+          Session.set('newUserFeedback', error.reason);
+        } else {
+          Session.set('newUserFeedback', 'New user created successfully.');
+        }
+      });
     }
   });
 
@@ -179,7 +194,13 @@ Template.admin.events({
 
 Template.userlist.helpers({
   'users': function(){
-     console.log(Meteor.users.find({}, {fields: {username: 1, group: 1}}));
-     return Meteor.users.find({}, {fields: {username: 1, group: 1}});
+    console.log(Meteor.users.find({}, {fields: {username: 1, group: 1}}));
+    return Meteor.users.find({}, {fields: {username: 1, group: 1}});
+  }
+});
+
+Template.user.helpers({
+  'group': function(id){
+    return ReactiveMethod.call('getRolesForUser', id);
   }
 });
