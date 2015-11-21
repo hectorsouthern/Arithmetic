@@ -8,7 +8,7 @@
 <template name="main-menu">
     <a href="/quiz"><button id="newquiz">Begin New Quiz</button></a>
     <button id="pastresults">View Past Results</button>
-    <button id="teacherarea">Teacher Area</button>
+    <a href="/admin"><button id="teacherarea">Teacher Area</button></a>
 </template>
 <template name="quiz">
   <h2>Question #{{questionNum}}</h2>
@@ -33,12 +33,29 @@
      </div>
    </form>
 </template>
-<template name='register'>
-  <form id="register-form" action="action">
+<template name='admin'>
+  <form id="new-user-form" action="action">
     <div>
-     <input type="email" id="account-email" />
+      <p>
+        <h3>Add new user</h3>
+      </p>
+     <input type="username" id="account-username" />
      <input type="password" id="account-password" />
-     <input type="submit" id="create-account" value="Create an Account" />
+     <input type="text" id="account-role" />
+     <input type="submit" id="create-account" value="Create account" />
+     <p>
+       {{newuserfeedback}}
+     </p>
    </div>
  </form>
+</template>
+<template name='userlist'>
+{{#each users}}
+  {{> user}}
+{{/each}}
+</template>
+<template name="user">
+  <li class="list-group-item">
+    {{username}}: {{group}}
+  </li>
 </template>

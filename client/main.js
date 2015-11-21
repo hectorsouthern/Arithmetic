@@ -61,7 +61,7 @@ nextQuestion = function(noincrement){
     }
     Session.set('question', data);
     if(!noincrement){
-      Session.set('questionNum', Session.get('questionNum') + 1);
+        Session.set('questionNum', Session.get('questionNum') + 1);
     }
   });
 }
@@ -144,24 +144,42 @@ Template.login.events({
     }
 });
 
-Template.register.events({
-    'submit #register-form' : function(e, t) {
+//TEMPLATE 'ADMIN'
+
+Template.admin.helpers({
+  'newuserfeedback': function(){
+    return Session.get('newuserfeedback');
+  }
+});
+
+Template.admin.events({
+    'submit #new-user-form' : function(e, t) {
       e.preventDefault();
-      var email = t.find('#account-email').value
-        , password = t.find('#account-password').value;
-
-        // Trim and validate the input
-
-      Accounts.createUser({email: email, password : password}, function(err){
+      var username = t.find('#account-username').value;
+      var password = t.find('#account-password').value;
+      var role = t.find('#account-role').value;
+      Accounts.createUser({username: username, password: password}, function(err){
           if (err) {
-            // Inform the user that account creation failed
+            Session.set('newuserfeedback', err.reason);
           } else {
             console.log("User created");
-            Router.go('login');
+            Session.set('newuserfeedback', "User Created");
+            t.find('#account-username').value = '';
+            t.find('#account-password').value = '';
+            t.find('#account-role').value = '';
+            Roles.addUserstoRoles(Meteor.users.find({}, fields: {username: username}), 'admin', 'default-group');
           }
-
         });
-
       return false;
     }
   });
+
+
+//DEBUG TEMPLATES
+
+Template.userlist.helpers({
+  'users': function(){
+     console.log(Meteor.users.find({}, {fields: {username: 1, group: 1}}));
+     return Meteor.users.find({}, {fields: {username: 1, group: 1}});
+  }
+});
