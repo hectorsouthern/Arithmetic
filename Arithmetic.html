@@ -12,7 +12,9 @@
     </p>
     <a href="/quiz"><button id="newquiz">Begin New Quiz</button></a>
     <button id="pastresults">View Past Results</button>
-    <a href="/admin"><button id="teacherarea">Teacher Area</button></a>
+    {{#if isInRole 'teacher'}}
+      <a href="/admin"><button id="teacherarea">Teacher Area</button></a>
+    {{/if}}
 </template>
 
 <template name="quiz">
@@ -62,10 +64,13 @@
  <form id="move-user-form" action="action">
    <div>
      <p>
-       <h3>Add user to group</h3>
+       <h3>Change user role</h3>
      </p>
     <input type="username" id="move-username" />
-    <input type="text" id="group" />
+    <select id='move-role'>
+      <option value="teacher">Teacher</option>
+      <option value="student">Student</option>
+    </select>
     <input type="submit" id="add-user-to-group" value="Submit" />
     <p>
       {{moveToGroupFeedback}}

@@ -35,21 +35,20 @@ Meteor.methods({
   },
   'createNewUser': function(username, password, role){
     if (!Roles.userIsInRole(this.userId, ['teacher'])){
-      throw new Meteor.Error('Invalid Rights.', 'Only teachers can create new users.');
+      //TODO RENABLE FOR PROD.
+      // throw new Meteor.Error('Invalid Rights.', 'Only teachers can create new users.');
+      console.log("Only teachers can create new users! Ignoring for prod!");
     }
-    var id = Accounts.createUser({username: username, password: password}){
-      if(err){
-        return err.reason;
-      } else {
-      Roles.addUsersToRoles(id, role);
-      }
-    });
-  },
-  'addUserToRole': function(username, role){
-    console.log(username + " " + group);
-    Roles.addUsersToRoles(Accounts.findUserByUsername(username), role);
+    var id = Accounts.createUser({username: username, password: password});
+    Roles.addUsersToRoles(id, role);
+    return id;
   },
   'getRolesForUser': function(id){
     return Roles.getRolesForUser(id);
+  },
+  'moveUserToRole': function(username, role){
+    var user = Accounts.findUserByUsername(username);
+    Roles.removeUsersFromRoles(user, Roles.getRolesForUsers(id));
+    Roles.addUsersToRoles(user, role);
   }
 });

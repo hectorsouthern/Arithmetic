@@ -161,8 +161,8 @@ Template.admin.helpers({
 });
 
 Template.admin.events({
+    //TODO MOVE ERRORS TO CLOUD
     'submit #new-user-form' : function(e, t) {
-      console.log(t);
       e.preventDefault();
       var username = t.find('#account-username').value;
       var password = t.find('#account-password').value;
@@ -179,22 +179,28 @@ Template.admin.events({
         Session.set('newUserFeedback', 'You must set a role for this user.')
         return false;
       }
-      Meteor.call('createNewUser',{username: username, password: password, role: role}, function(error){
+      Meteor.call('createNewUser', username, password, role, function(error){
         if(error){
           Session.set('newUserFeedback', error.reason);
         } else {
+          t.find('#account-username').value = null;
+          t.find('#account-password').value = null;
           Session.set('newUserFeedback', 'New user created successfully.');
         }
       });
+    },
+    'submit #move-user-form': function(e, t){
+      e.preventDefault();
+      var username = t.find('#move-username');
+      var role = t.find('#move-role');
+      Meteor.call('moveUserToRole', username, role);
     }
-  });
-
+});
 
 //DEBUG TEMPLATES
 
 Template.userlist.helpers({
   'users': function(){
-    console.log(Meteor.users.find({}, {fields: {username: 1, group: 1}}));
     return Meteor.users.find({}, {fields: {username: 1, group: 1}});
   }
 });
