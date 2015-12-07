@@ -1,1 +1,4 @@
-/* CSS declarations go here */
+.centered {
+  display:inline;
+  text-align: center;
+  }/* CSS declarations go here */

@@ -20,8 +20,8 @@ autopublish             # Publish all data to the clients (for prototyping)
 insecure                # Allow all DB writes from clients (for prototyping)
 iron:router
 aslagle:reactive-table
-twbs:bootstrap
 accounts-password
 accounts-ui-unstyled
 alanning:roles
 simple:reactive-method
+twbs:bootstrap

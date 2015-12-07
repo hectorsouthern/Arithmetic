@@ -1,23 +1,26 @@
 <head>
   <title>Arithmetic</title>
 </head>
-
 <body>
+  <div class="row col-md-6 col-md-offset-3 centered">
   <h1>Arithmetic Quiz</h1>
+  <p>
+  {{> loginButtons}}
+  </p>
+  </div>
 </body>
-
 <template name="main-menu">
-    <p>
-    {{> loginButtons}}
-    </p>
+  <div class="row col-md-6 col-md-offset-3 centered">
     <a href="/quiz"><button id="newquiz">Begin New Quiz</button></a>
-    <button id="pastresults">View Past Results</button>
+    <a href="#"><button id="pastresults">View Past Results</button></a>
     {{#if isInRole 'teacher'}}
       <a href="/admin"><button id="teacherarea">Teacher Area</button></a>
     {{/if}}
+  </div>
 </template>
 
 <template name="quiz">
+  <div class="row col-md-2 col-md-offset-4">
   <h2>Question #{{questionNum}}</h2>
   {{question}}
   <button id='nq'>New Question</button>
@@ -25,15 +28,19 @@
     <input type="text" name="answer">
     <input type="submit" value="Submit">
   </form>
+</div>
   {{feedback}}
 </template>
 
 <template name="results">
+  <div class="col-md-2 col-md-offset-5">
   <h2>Results</h2>
   {{> reactiveTable settings=settings class="table table-bordered table-hover"}}
+</div>
 </template>
 
 <template name="login">
+  <div class="col-md-2 col-md-offset-5">
   <form id="login-form" action="action">
       <div>
         <input type="email" id="login-email" />
@@ -41,9 +48,11 @@
         <input type="submit" id="login-button" value="Sign in" />
      </div>
    </form>
+ </div>
 </template>
 
 <template name='admin'>
+  <div class="col-md-2 col-md-offset-5">
   <form id="new-user-form" action="action">
     <div>
       <p>
@@ -77,12 +86,15 @@
     </p>
   </div>
 </form>
+</div>
 </template>
 
 <template name='userlist'>
+  <div class="col-md-2 col-md-offset-5">
 {{#each users}}
   {{> user}}
 {{/each}}
+</div>
 </template>
 
 <template name="user">
