@@ -1,4 +1,10 @@
 .centered {
-  display:inline;
+  display: inline;
   text-align: center;
-  }/* CSS declarations go here */
+}
+
+.menu-button {
+  padding-bottom: 1%;
+}
+
+/* CSS declarations go here */
