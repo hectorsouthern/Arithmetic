@@ -1,5 +1,9 @@
 Session.set('questionNum', 1);
+Session.set('CorrectNum', 0);
 Session.set('answerLog', []);
+
+Data = new Mongo.Collection("data");
+Meteor.subscribe("data");
 
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY'
@@ -33,12 +37,13 @@ Template.quiz.events({
     } else {
       if (userAnswer == eval(Session.get('question'))) {
         Session.set('feedback', 'Correct!');
+        Session.set('CorrectNum', Session.get('CorrectNum') + 1);
       } else {
         Session.set('feedback', 'Wrong.');
       }
       addToAnswerLog(Session.get('question'), userAnswer);
       if (Session.get('questionNum') >= 10) {
-        Meteor.call('submitAnswers', Session.get('answerLog'), Meteor.userId(), Meteor.user().username);
+        Meteor.call('submitAnswers', Session.get('answerLog'), Session.get('CorrectNum'), Meteor.userId(), Meteor.user().username);
         Router.go('results');
       } else {
         nextQuestion();
@@ -136,31 +141,10 @@ getRowClass = function(element) {
   }
 }
 
-Template.login.events({
-  'submit #login-form': function(e, t) {
-    e.preventDefault();
-    // retrieve the input field values
-    var email = t.find('#login-email').value,
-      password = t.find('#login-password').value;
-
-    // Trim and validate your fields here....
-
-    // If validation passes, supply the appropriate fields to the
-    // Meteor.loginWithPassword() function.
-    Meteor.loginWithPassword(email, password, function(err) {
-      if (err) {
-        // The user might not have been found, or their passwword
-        // could be incorrect. Inform the user that their
-        // login attempt has failed.
-      } else {
-        console.log('Login Success');
-        Router.go('/');
-      }
-    });
-    return false;
-  }
-});
-
+Template.login.rendered = function () {
+  this.$('.dropdown-toggle').remove();
+  this.$('.dropdown-menu').show();
+}
 //TEMPLATE 'ADMIN'
 
 Template.admin.helpers({
@@ -206,6 +190,18 @@ Template.admin.events({
     var username = t.find('#move-username');
     var role = t.find('#move-role');
     Meteor.call('moveUserToRole', username, role);
+  }
+});
+
+//TEMPLATE 'PASTRESULTS'
+
+Template.pastresults.helpers({
+  'dates': function(){
+    return Data.find({userId: Meteor.userId()}, {fields: {date: 1, correct: 1}}).fetch();
+  },
+  'dateconv': function(ldate){
+    var dateobj = new Date(ldate)
+    return moment(dateobj).format("l LT")
   }
 });
 

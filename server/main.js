@@ -2,9 +2,15 @@ Data = new Mongo.Collection("data");
 
 var maxQuestionNumber = 10;
 var minQuestionNumber = 1;
+
 Meteor.startup(function () {
   console.log("Loaded! :)")
 });
+
+Meteor.publish("data", function(){
+  return Data.find();
+});
+
 Meteor.methods({
   'generateQuestion': function(){
     var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
@@ -16,11 +22,12 @@ Meteor.methods({
       return (questionPart1 + " - " + questionPart2);
     }
   },
-  'submitAnswers': function(array, userId, username){
+  'submitAnswers': function(array, CorrectNum, userId, username){
     Data.insert({
       userId: userId,
       username: username,
       date: new Date().toISOString(),
+      correct: CorrectNum,
       q1: [array[0][0],array[0][1]],
       q2: [array[1][0],array[1][1]],
       q3: [array[2][0],array[2][1]],
