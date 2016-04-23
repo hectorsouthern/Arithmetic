@@ -156,7 +156,14 @@
 <template name='pastresults'>
   <div class="row col-md-6 col-md-offset-3 centered">
     <div class='panel group'>
-      {{#if dates}} {{#each item in dates}}
+      {{#if dates}}
+      <h3>Progress</h3>
+      <div id="progChart" style="height:20vh">
+        {{> highchartsHelper chartId="progChart" chartObject=progChart}}
+      </div>
+      <hr style="margin-top: 0" />
+      <h3>Results</h3>
+      {{#each item in dates}}
       <div class='panel panel-default'>
         <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapse{{@index}}">
           <h4 class='panel-title' id="datetime">
