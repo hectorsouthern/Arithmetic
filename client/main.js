@@ -130,6 +130,7 @@ getTableData = function() {
     data: array,
     wrongAns: wrongAns
   };
+  console.log(tableData);
   return tableData;
 }
 
@@ -197,13 +198,72 @@ Template.admin.events({
 
 Template.pastresults.helpers({
   'dates': function(){
-    return Data.find({userId: Meteor.userId()}, {fields: {date: 1, correct: 1}}).fetch();
+    var data = Data.find({userId: Meteor.userId()}, {sort: {date: -1}}, {fields: {date: 1, correct: 1, q1: 1, q2: 1, q3: 1, q4: 1, q5: 1, q6: 1, q7: 1, q8: 1, q9: 1, q10: 1}}).fetch();
+    var wrongAns = [];
+    for (var i = 0; i < data.length; i++) {
+      wrongAns.push(0);
+      for (var j = 0; j < 10; j++) {
+        if(eval(eval("data[" + i + "].q" + (j + 1) + "[0]")) != eval(eval("data[" + i + "].q" + (j + 1) + "[1]"))){
+          eval("data[" + i + "].q" + (j + 1)).push(eval(eval("data[" + i + "].q" + (j + 1) + "[0]")));
+          wrongAns[i]++;
+        } else {
+          eval("data[" + i + "].q" + (j + 1)).push(null);
+        }
+      }
+    }
+    var dataObj = [];
+    for (var i = 0; i < data.length; i++) {
+      dataObj.push({'date':data[i].date, 'correct': (10 - wrongAns[i]) ,'data':[
+        [data[i].q1[0], data[i].q1[1], data[i].q1[2]],
+        [data[i].q2[0], data[i].q2[1], data[i].q2[2]],
+        [data[i].q3[0], data[i].q3[1], data[i].q3[2]],
+        [data[i].q4[0], data[i].q4[1], data[i].q4[2]],
+        [data[i].q5[0], data[i].q5[1], data[i].q5[2]],
+        [data[i].q6[0], data[i].q6[1], data[i].q6[2]],
+        [data[i].q7[0], data[i].q7[1], data[i].q7[2]],
+        [data[i].q8[0], data[i].q8[1], data[i].q8[2]],
+        [data[i].q9[0], data[i].q9[1], data[i].q9[2]],
+        [data[i].q10[0], data[i].q10[1], data[i].q10[2]]
+      ]});
+    }
+    console.log(dataObj);
+    return dataObj;
   },
   'dateconv': function(ldate){
     var dateobj = new Date(ldate)
     return moment(dateobj).format("l LT")
   }
 });
+
+Handlebars.registerHelper('settings', function(correct) {
+    return {
+      showFilter: false,
+      showNavigation: 'never',
+      showNavigationRowsPerPage: false,
+      rowClass: getRowClass,
+      fields: [{
+        key: '0',
+        label: 'Question',
+        sortable: false
+      }, {
+        key: '1',
+        label: 'Your Answer',
+        sortable: false
+      }, {
+        key: '2',
+        label: 'Correct Answer',
+        sortable: false,
+        hidden: function() {
+          if (correct == 10) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }]
+    };
+});
+
 
 //DEBUG TEMPLATES
 
