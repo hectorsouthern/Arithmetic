@@ -11,6 +11,10 @@ Meteor.publish("data", function() {
     return Data.find();
 });
 
+Meteor.publish("userList", function() {
+    return Meteor.users.find({});
+});
+
 Meteor.methods({
     'generateQuestion': function() {
         var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);

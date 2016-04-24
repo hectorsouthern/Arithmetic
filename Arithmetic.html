@@ -131,7 +131,7 @@
 </template>
 
 <template name='admin'>
-    <div class="col-md-2 col-md-offset-5">
+    <div class="row col-md-6 col-md-offset-3 centered">
         <form id="new-user-form" action="action">
             <div>
                 <p>
@@ -142,6 +142,9 @@
                 <select id='account-role'>
                     <option value="teacher">Teacher</option>
                     <option value="student">Student</option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                    <option value="Class 3">Class 3</option>
                 </select>
                 <input type="submit" id="create-account" value="Create account" />
                 <p>
@@ -158,6 +161,9 @@
                 <select id='move-role'>
                     <option value="teacher">Teacher</option>
                     <option value="student">Student</option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                    <option value="Class 3">Class 3</option>
                 </select>
                 <input type="submit" id="add-user-to-group" value="Submit" />
                 <p>
@@ -165,6 +171,61 @@
                 </p>
             </div>
         </form>
+        <script>
+            $('#myTabs a').click(function(e) {
+                e.preventDefault()
+                $(this).tab('show')
+            })
+        </script>
+        <style>
+            #users li {
+                list-style-type: none;
+            }
+
+            #users div {
+                padding: 0, 0, 0, 0;
+                margin: 0, 0, 0, 0;
+            }
+        </style>
+        <div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">Users</a></li>
+                <li role="presentation"><a href="#groups" aria-controls="groups" role="tab" data-toggle="tab">Groups</a></li>
+                <li role="presentation"><a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="users">
+                    <div class="row">
+                        <div class="col-md-4 list-group">
+                            <ul class="user-list sortable1 .col-md-4">
+                                <li class="list-group-item disabled">Class 1</li>
+                                {{#each class1Users}}
+                                <li class="userlist-item list-group-item">{{username}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                        <div class="col-md-4 list-group">
+                            <ul class="user-list sortable2 .col-md-4">
+                                <li class="list-group-item disabled">Class 2</li>
+                                {{#each class2Users}}
+                                <li class="userlist-item list-group-item">{{username}}</li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                        <div class="col-md-4 list-group">
+                            <ul class="user-list sortable3 .col-md-4">
+                              <li class="list-group-item disabled">Class 2</li>
+                              {{#each class3Users}}
+                              <li class="userlist-item list-group-item">{{username}}</li>
+                              {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="groups">2</div>
+                <div role="tabpanel" class="tab-pane" id="results">3</div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -190,14 +251,8 @@
             <input type="submit" id="generatedata-submit" value="Generate" />
         </form>
         <hr />
-        <h2>User List & Groups</h2> {{#each users}} {{> user}} {{/each}}
+        <h2>User List & Groups</h2>
     </div>
-</template>
-
-<template name='user'>
-    <li class="list-group-item">
-        {{username}}: {{group _id}}
-    </li>
 </template>
 
 <template name='pastresults'>

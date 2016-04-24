@@ -1,5 +1,6 @@
 Data = new Mongo.Collection("data");
 Meteor.subscribe("data");
+Meteor.subscribe("userList");
 
 Accounts.ui.config({
     passwordSignupFields: 'USERNAME_ONLY'
@@ -151,6 +152,15 @@ Template.admin.helpers({
     },
     'moveToGroupFeedback': function() {
         return Session.get('moveToGroupFeedback')
+    },
+    'class1Users': function() {
+        return Roles.getUsersInRole('Class 1')
+    },
+    'class2Users': function() {
+        return Roles.getUsersInRole('Class 2')
+    },
+    'class3Users': function() {
+        return Roles.getUsersInRole('Class 3')
     }
 });
 
@@ -190,6 +200,15 @@ Template.admin.events({
         Meteor.call('moveUserToRole', username, role);
     }
 });
+
+Template.admin.rendered = function() {
+    $(document).ready(function() {
+        $('.sortable1, .sortable2, .sortable3').sortable({
+            connectWith: '.connected',
+            items: ':not(.disabled)'
+        });
+    })
+}
 
 //TEMPLATE 'PASTRESULTS'
 
@@ -363,16 +382,7 @@ Handlebars.registerHelper('settings', function(correct) {
 
 //DEBUG TEMPLATES
 
-Template.debug.helpers({
-    'users': function() {
-        return Meteor.users.find({}, {
-            fields: {
-                username: 1,
-                group: 1
-            }
-        });
-    }
-});
+Template.debug.helpers({});
 
 Template.debug.events({
     'submit #generatedata': function(e, t) {
@@ -383,24 +393,18 @@ Template.debug.events({
             return false;
         }
         Meteor.call('generateUserData', username, score);
-      }
-});
-
-Template.user.helpers({
-    'group': function(id) {
-        return ReactiveMethod.call('getRolesForUser', id);
     }
 });
 
-function generateQuestionlocal(){
-  var maxQuestionNumber = 10;
-  var minQuestionNumber = 1;
-  var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
-  var questionPart2 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
-  var rndbool = Math.random() >= 0.5;
-  if(rndbool){
-    return (questionPart1 + " + " + questionPart2);
-  } else {
-    return (questionPart1 + " - " + questionPart2);
-  }
+function generateQuestionlocal() {
+    var maxQuestionNumber = 10;
+    var minQuestionNumber = 1;
+    var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
+    var questionPart2 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
+    var rndbool = Math.random() >= 0.5;
+    if (rndbool) {
+        return (questionPart1 + " + " + questionPart2);
+    } else {
+        return (questionPart1 + " - " + questionPart2);
+    }
 }
