@@ -1,7 +1,3 @@
-Session.set('questionNum', 1);
-Session.set('CorrectNum', 0);
-Session.set('answerLog', []);
-
 Data = new Mongo.Collection("data");
 Meteor.subscribe("data");
 
@@ -43,8 +39,8 @@ Template.quiz.events({
         } else {
             $('body').removeClass('fadeout').addClass('red');
         }
-        setTimeout(function(){
-          $('body').removeClass('grn').removeClass('red').addClass('fadeout');
+        setTimeout(function() {
+            $('body').removeClass('grn').removeClass('red').addClass('fadeout');
         }, 100);
         addToAnswerLog(Session.get('question'), userAnswer);
         if (Session.get('questionNum') >= 10) {
@@ -70,10 +66,10 @@ nextQuestion = function(noincrement) {
         if (err) {
             console.log(err);
         }
-        Session.set('question', data);
         if (!noincrement) {
             Session.set('questionNum', Session.get('questionNum') + 1);
         }
+        Session.set('question', data);
     });
 }
 
@@ -367,7 +363,7 @@ Handlebars.registerHelper('settings', function(correct) {
 
 //DEBUG TEMPLATES
 
-Template.userlist.helpers({
+Template.debug.helpers({
     'users': function() {
         return Meteor.users.find({}, {
             fields: {
@@ -378,8 +374,33 @@ Template.userlist.helpers({
     }
 });
 
+Template.debug.events({
+    'submit #generatedata': function(e, t) {
+        e.preventDefault();
+        var username = t.find('#generatedata-user').value;
+        var score = t.find('#generatedata-score').value;
+        if (username.length < 1) {
+            return false;
+        }
+        Meteor.call('generateUserData', username, score);
+      }
+});
+
 Template.user.helpers({
     'group': function(id) {
         return ReactiveMethod.call('getRolesForUser', id);
     }
 });
+
+function generateQuestionlocal(){
+  var maxQuestionNumber = 10;
+  var minQuestionNumber = 1;
+  var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
+  var questionPart2 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
+  var rndbool = Math.random() >= 0.5;
+  if(rndbool){
+    return (questionPart1 + " + " + questionPart2);
+  } else {
+    return (questionPart1 + " - " + questionPart2);
+  }
+}
