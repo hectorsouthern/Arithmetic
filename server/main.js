@@ -56,7 +56,7 @@ Meteor.methods({
   'moveUserToRole': function(username, role){
     //TODO errors
     var user = Accounts.findUserByUsername(username);
-    Roles.removeUsersFromRoles(user, Roles.getRolesForUsers(id));
+    Roles.removeUsersFromRoles(user, Roles.getRolesForUser(user));
     Roles.addUsersToRoles(user, role);
   }
 });
