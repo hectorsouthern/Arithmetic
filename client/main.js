@@ -201,7 +201,7 @@ Template.admin.events({
     }
 });
 
-Template.admin.rendered = function() {
+Template.userDrag.rendered = function() {
     $(document).ready(function() {
         $('.sortable1, .sortable2, .sortable3').sortable({
             connectWith: '.connected',

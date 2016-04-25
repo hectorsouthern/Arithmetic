@@ -200,7 +200,7 @@
                             <ul class="user-list sortable1 .col-md-4">
                                 <li class="list-group-item disabled">Class 1</li>
                                 {{#each class1Users}}
-                                <li class="userlist-item list-group-item">{{username}}</li>
+                                <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
                                 {{/each}}
                             </ul>
                         </div>
@@ -208,7 +208,7 @@
                             <ul class="user-list sortable2 .col-md-4">
                                 <li class="list-group-item disabled">Class 2</li>
                                 {{#each class2Users}}
-                                <li class="userlist-item list-group-item">{{username}}</li>
+                                <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
                                 {{/each}}
                             </ul>
                         </div>
@@ -216,7 +216,7 @@
                             <ul class="user-list sortable3 .col-md-4">
                               <li class="list-group-item disabled">Class 2</li>
                               {{#each class3Users}}
-                              <li class="userlist-item list-group-item">{{username}}</li>
+                              <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
                               {{/each}}
                             </ul>
                         </div>
@@ -227,6 +227,10 @@
             </div>
         </div>
     </div>
+</template>
+
+<template name="userDrag">
+  {{username}}
 </template>
 
 <template name='debug'>
