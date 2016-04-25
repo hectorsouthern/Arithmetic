@@ -206,6 +206,8 @@ Template.userDrag.rendered = function() {
         $('.sortable1, .sortable2, .sortable3').sortable({
             connectWith: '.connected',
             items: ':not(.disabled)'
+        }).bind('sortupdate', function(e, ui){
+          Meteor.call('moveUserToRole', ui.item[0]['textContent'], ui.endparent[0]['outerText'].split("\n")[0]);
         });
     })
 }
