@@ -226,13 +226,13 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Filter">
+                <input type="text" class="form-control" id="filterText" placeholder="Filter">
                 <span class="input-group-btn">
-                  <button type="button" class="btn btn-default">Apply</button>
+                  <button type="button" class="btn btn-default" id="filterTextClear"><span class="glyphicon glyphicon-remove-circle"></span></button>
                 </span>
               </div>
             </div>
-            <div class="pull-left">
+            <div class="pull-left col-sm-8">
               <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default disabled">Show:</button>
                 <button type="button" id="showClass1" class="btn btn-default {{showClass1state}}">Class 1</button>
@@ -252,6 +252,22 @@
                 </div>
               </div>
             </div>
+            <hr /> {{#if results}} {{#each item in results}}
+            <div class='panel panel-default'>
+              <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapse{{@index}}">
+                <h4 class='panel-title' id="datetime">
+                      {{dateconv item.date}}</h4>
+                <h4 class='panel-title' id="score">{{item.correct}}/10</h4>
+              </div>
+              <div id='collapse{{@index}}' class='panel-collapse collapse'>
+                <div class='panel-body'>
+                  {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}}
+                </div>
+              </div>
+            </div>
+            {{/each}}
+            {{else}}
+            <h3>No results found</h3> {{/if}}
           </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="groups">2</div>

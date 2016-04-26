@@ -189,6 +189,25 @@ Template.admin.helpers({
     } else {
       return Session.get('sortByLabel');
     }
+  },
+  'results': function() {
+    var criteria = {}
+    if (Session.get('filterText') != "") {
+      var usernameArray = []
+      for (var i = 0; i < Session.get('filterText').split(',').length; i++) {
+        usernameArray.push({
+          username: Session.get('filterText').split(',')[i].trim()
+        });
+      }
+      criteria.$or = usernameArray;
+      console.log(criteria);
+    }
+    console.log(Data.find(criteria).fetch());
+    return Data.find(criteria).fetch();
+  },
+  'dateconv': function(ldate) {
+    var dateobj = new Date(ldate)
+    return moment(dateobj).format("l LT")
   }
 });
 
@@ -250,15 +269,26 @@ Template.admin.events({
   },
   'click #sortAvScoreAsc': function(e, t) {
     Session.set('sortByLabel', "Average Score <span class='glyphicon glyphicon-chevron-up'>")
+    Session.set('sortBy', "AvScoreAsc");
   },
   'click #sortAvScoreDec': function(e, t) {
     Session.set('sortByLabel', "Average Score <span class='glyphicon glyphicon-chevron-down'>")
+    Session.set('sortBy', "AvScoreDec");
   },
   'click #sortNameAsc': function(e, t) {
     Session.set('sortByLabel', "Name <span class='glyphicon glyphicon-chevron-up'>")
+    Session.set('sortBy', "NameAsc");
   },
   'click #sortNameDec': function(e, t) {
     Session.set('sortByLabel', "Name <span class='glyphicon glyphicon-chevron-down'>")
+    Session.set('sortBy', "NameDec");
+  },
+  'keyup #filterText': function(e, t) {
+    Session.set('filterText', t.find('#filterText').value);
+  },
+  'click #filterTextClear': function(e, t) {
+    t.find('#filterText').value = "";
+    Session.set('filterText', "");
   }
 });
 
