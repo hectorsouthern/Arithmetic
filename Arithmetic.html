@@ -255,13 +255,16 @@
             <hr /> {{#if results}} {{#each item in results}}
             <div class='panel panel-default'>
               <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapse{{@index}}">
-                <h4 class='panel-title' id="datetime">
-                      {{dateconv item.date}}</h4>
-                <h4 class='panel-title' id="score">{{item.correct}}/10</h4>
+                <div class="row">
+                  <h4 class='panel-title col-sm-2' id='datetime'>{{item.username}}</h4>
+                  <h4 class='panel-title col-sm-2' id='datetime'>{{item.class}}</h4>
+                  <h4 class='panel-title col-sm-4' id="datetime">{{dateconv item.date}}</h4>
+                  <h4 class='panel-title col-sm-2 pull-right' id="score">{{item.correct}}/10</h4>
+                </div>
               </div>
               <div id='collapse{{@index}}' class='panel-collapse collapse'>
                 <div class='panel-body'>
-                  {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}}
+                  <!-- {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}} -->
                 </div>
               </div>
             </div>
@@ -274,6 +277,37 @@
       </div>
     </div>
   </div>
+  <style>
+    .panel-heading.accordion-toggle:after {
+      /* symbol for "opening" panels */
+      font-family: 'Glyphicons Halflings';
+      /* essential for enabling glyphicon */
+      content: "\e114";
+      /* adjust as needed, taken from bootstrap.css */
+      float: right;
+      position: relative;
+      bottom: 23px;
+      font-size: 15pt;
+      /* adjust as needed */
+      color: grey;
+      /* adjust as needed */
+    }
+
+    .panel-heading.accordion-toggle.collapsed:after {
+      /* symbol for "collapsed" panels */
+      content: "\e080";
+      /* adjust as needed, taken from bootstrap.css */
+    }
+
+    #datetime {
+      text-align: left;
+      float: left;
+    }
+
+    #score {
+      text-align: center;
+    }
+  </style>
 </template>
 
 <template name="userDrag">
