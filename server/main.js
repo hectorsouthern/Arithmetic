@@ -43,6 +43,45 @@ Meteor.methods({
             q9: [array[8][0], array[8][1]],
             q10: [array[9][0], array[9][1]]
         });
+        var pastResults = Data.find({
+            userId: userId
+        }, {
+            fields: {
+                correct: 1
+            }
+        }).fetch();
+        var totalScore = 0;
+        for (var i = 0; i < pastResults.length; i++) {
+            totalScore = totalScore + pastResults[i]['correct'];
+        }
+        averageScore = (totalScore / pastResults.length).toFixed(1);
+        Meteor.users.update({
+            _id: userId
+        }, {
+            $set: {
+                averageScore: averageScore
+            }
+        });
+        pastResults = Data.find({
+            userId: userId
+        }, {
+            fields: {
+                correct: 1
+            },
+            limit: 3
+        }).fetch();
+        totalScore = 0;
+        for (var i = 0; i < pastResults.length; i++) {
+            totalScore = totalScore + pastResults[i]['correct'];
+        }
+        averageScore = (totalScore / pastResults.length).toFixed(1);
+        Meteor.users.update({
+            _id: userId
+        }, {
+            $set: {
+                recentAverageScore: averageScore
+            }
+        });
     },
     'createNewUser': function(username, password, role) {
         if (!Roles.userIsInRole(this.userId, ['teacher'])) {
@@ -52,9 +91,14 @@ Meteor.methods({
         }
         var id = Accounts.createUser({
             username: username,
-            password: password
+            password: password,
+            averageScore: 0
         });
-        Roles.addUsersToRoles(id, role);
+        if (role != null) {
+            Roles.addUsersToRoles(id, role);
+        } else {
+            Roles.addUsersToRoles(id, "Class 1");
+        }
         return id;
     },
     'getRolesForUser': function(id) {
@@ -81,5 +125,13 @@ Meteor.methods({
             answerLog.push([question, eval(question) + 1]);
         }
         Meteor.call('submitAnswers', answerLog, score, Accounts.findUserByUsername(username)._id, username);
+    },
+    'deleteUser': function(username) {
+        Data.remove({
+            username: username
+        });
+        Meteor.users.remove({
+            username: username
+        });
     }
 });
