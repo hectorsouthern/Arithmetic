@@ -15,6 +15,12 @@ Meteor.publish("userList", function() {
     return Meteor.users.find({});
 });
 
+Accounts.onCreateUser(function(options, user) {
+  user.averageScore = options.averageScore;
+  user.recentAverageScore = options.recentAverageScore;
+  return user;
+});
+
 Meteor.methods({
     'generateQuestion': function() {
         var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
@@ -84,15 +90,11 @@ Meteor.methods({
         });
     },
     'createNewUser': function(username, password, role) {
-        if (!Roles.userIsInRole(this.userId, ['teacher'])) {
-            //TODO RENABLE FOR PROD.
-            // throw new Meteor.Error('Invalid Rights.', 'Only teachers can create new users.');
-            console.log("Only teachers can create new users! Ignoring for prod!");
-        }
         var id = Accounts.createUser({
             username: username,
             password: password,
-            averageScore: 0
+            averageScore: 0,
+            recentAverageScore: 0
         });
         if (role != null) {
             Roles.addUsersToRoles(id, role);
@@ -127,11 +129,13 @@ Meteor.methods({
         Meteor.call('submitAnswers', answerLog, score, Accounts.findUserByUsername(username)._id, username);
     },
     'deleteUser': function(username) {
-        Data.remove({
-            username: username
-        });
-        Meteor.users.remove({
-            username: username
-        });
+        if(username != 'admin'){
+          Data.remove({
+              username: username
+          });
+          Meteor.users.remove({
+              username: username
+          });
+        }
     }
 });

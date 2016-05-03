@@ -31,7 +31,6 @@ email@1.0.12
 es5-shim@4.5.10
 fastclick@1.0.11
 geojson-utils@1.0.8
-hinas:meteor-bootstrap-confirmation@0.9.0
 hot-code-push@1.0.4
 html-tools@1.0.9
 htmljs@1.0.9
@@ -89,6 +88,7 @@ standard-minifier-js@1.0.6
 stylus@2.511.5
 templating@1.1.9
 templating-tools@1.0.4
+theduke:bootstrap-modal-prompt@0.0.2
 themeteorchef:html5-sortable@0.1.6
 tracker@1.0.13
 twbs:bootstrap@3.3.6

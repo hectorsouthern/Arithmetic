@@ -1,548 +1,588 @@
 <head>
-    <title>Arithmetic</title>
+  <title>Arithmetic</title>
 </head>
 
 <body>
-    <div class="navbar navbar-default" role="navigation">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Arithmetic</a>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="/quiz">New Quiz</a>
-                </li>
-                <li>
-                    <a href="/pastresults">Past Results</a>
-                </li>
-                {{#if isInRole 'teacher'}}
-                    <li>
-                        <a href="/admin">Teacher Area</a>
-                    </li>
-                {{/if}}
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                {{> loginButtons}}
-            </ul>
-        </div>
+  <div class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Arithmetic</a>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
     </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/quiz">New Quiz</a>
+        </li>
+        <li>
+          <a href="/pastresults">Past Results</a>
+        </li>
+        {{#if isInRole 'teacher'}}
+        <li>
+          <a href="/admin">Teacher Area</a>
+        </li>
+        {{/if}}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {{> loginButtons}}
+      </ul>
+    </div>
+  </div>
 </body>
 <template name="main-menu">
-    <div class="row col-md-6 col-md-offset-3 centered">
-        <a href="/quiz">
-            <div class="row menu-button">
-                <button class="btn btn-success col-md-4 col-md-offset-4 centered" id="newquiz">Begin New Quiz</button>
-            </div>
-        </a>
-        <a href="/pastresults">
-            <div class="row menu-button">
-                <button class="btn btn-warning col-md-4 col-md-offset-4 centered" id="pastresults">View Past Results</button>
-            </div>
-        </a>
-        {{#if isInRole 'teacher'}}
-            <a href="/admin">
-                <div class="row menu-button">
-                    <button class="btn btn-danger col-md-4 col-md-offset-4 centered" id="teacherarea">Teacher Area</button>
-                </div>
-            </a>
-        {{/if}}
-    </div>
+  <div class="row col-md-6 col-md-offset-3 centered">
+    <a href="/quiz">
+      <div class="row menu-button">
+        <button class="btn btn-success col-md-4 col-md-offset-4 centered" id="newquiz">Begin New Quiz</button>
+      </div>
+    </a>
+    <a href="/pastresults">
+      <div class="row menu-button">
+        <button class="btn btn-warning col-md-4 col-md-offset-4 centered" id="pastresults">View Past Results</button>
+      </div>
+    </a>
+    {{#if isInRole 'teacher'}}
+    <a href="/admin">
+      <div class="row menu-button">
+        <button class="btn btn-danger col-md-4 col-md-offset-4 centered" id="teacherarea">Teacher Area</button>
+      </div>
+    </a>
+    {{/if}}
+  </div>
 </template>
 
 <template name="quiz">
-    <div class="row col-md-6 col-md-offset-3 centered">
-        <h2>
+  <div class="row col-md-6 col-md-offset-3 centered">
+    <h2>
             <small>Question #{{questionNum}}</small>
         </h2>
-        <hr/>
-        <h1>{{question}}</h1>
-        <form id='answer'>
-            <input type="text" name="answer">
-            <input type="submit" value="Submit">
-        </form>
-    </div>
-    <style>
-        .grn {
-            background-color: #7FE368;
-            opacity: 20%;
-            -webkit-transition: background 10ms linear;
-            -moz-transition: background 10ms linear;
-            -o-transition: background 10ms linear;
-            transition: background 10ms linear;
-        }
+    <hr/>
+    <h1>{{question}}</h1>
+    <form id='answer'>
+      <input type="text" name="answer">
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+  <style>
+    .grn {
+      background-color: #7FE368;
+      opacity: 20%;
+      -webkit-transition: background 10ms linear;
+      -moz-transition: background 10ms linear;
+      -o-transition: background 10ms linear;
+      transition: background 10ms linear;
+    }
 
-        .red {
-            background-color: #C50D22;
-            opacity: 20%;
-            -webkit-transition: background 10ms linear;
-            -moz-transition: background 10ms linear;
-            -o-transition: background 10ms linear;
-            transition: background 10ms linear;
-        }
+    .red {
+      background-color: #C50D22;
+      opacity: 20%;
+      -webkit-transition: background 10ms linear;
+      -moz-transition: background 10ms linear;
+      -o-transition: background 10ms linear;
+      transition: background 10ms linear;
+    }
 
-        .fadeout {
-            background-color: none;
-            -webkit-transition: background 1s ease-out;
-            -moz-transition: background 1s ease-out;
-            -o-transition: background 1s ease-out;
-            transition: background 1s ease-out;
-        }
-
-    </style>
+    .fadeout {
+      background-color: none;
+      -webkit-transition: background 1s ease-out;
+      -moz-transition: background 1s ease-out;
+      -o-transition: background 1s ease-out;
+      transition: background 1s ease-out;
+    }
+  </style>
 </template>
 
 <template name="results">
-    <div class="col-md-2 col-md-offset-5">
-        <h2>Results</h2>
-        {{> reactiveTable settings=settings class="table table-bordered table-hover"}}
-    </div>
+  <div class="col-md-2 col-md-offset-5">
+    <h2>Results</h2> {{> reactiveTable settings=settings class="table table-bordered table-hover"}}
+  </div>
 </template>
 
 <template name="login">
-    <div id="login-box">{{> loginButtons}}</div>
-    <style>
-        #login-box li.dropdown {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        #login-box li.dropdown .dropdown-menu {
-            float: none;
-            position: relative;
-            background-color: #ffffff;
-        }
-
-        #login-box li.dropdown .dropdown-menu .alert-danger {
-            color: #a94442;
-        }
-        #login-box li.dropdown .dropdown-menu:after {
-            visibility: hidden;
-            display: block;
-            font-size: 0;
-            content: " ";
-            clear: both;
-            height: 0;
-        }
-
-    </style>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="text-center">Login</h1>
+      </div>
+      <div class="modal-body">
+        <form class="form col-md-12 center-block">
+          <div class="form-group">
+            <input type="text" class="form-control input-lg" name="loginUsername" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control input-lg" name="loginPassword" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
 </template>
 
 <template name='admin'>
-    <div class="row col-md-6 col-md-offset-3 centered">
-        <script>
-            $('#myTabs a').click(function (e) {
-                e.preventDefault()
-                $(this).tab('show')
-            })
-        </script>
-        <div>
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active">
-                    <a href="#users" aria-controls="users" role="tab" data-toggle="tab">Users</a>
-                </li>
-                <li role="presentation">
-                    <a href="#classes" aria-controls="classes" role="tab" data-toggle="tab">Classes</a>
-                </li>
-                <li role="presentation">
-                    <a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="users">
-                    <div class="countainer-fluid">
-                        <div class="row">
-                            <div class="col-md-4" id="nopspace">
-                                <div class="btn-group pull-left" role="group">
-                                    <button type="button" class="btn btn-success" data-toggle="dropdown">Create User</button>
-                                    <form id="new-user-form" action="action" class="dropdown-menu">
-                                        <div class="input-group dropdown-padding">
-                                            <input type="text" class="form-control" placeholder="Username" id="account-username"/>
-                                            <input type="password" class="form-control" placeholder="Password" id="account-password"/>
-                                            <input type="submit" id="create-account" class="btn btn-success" value="Create account"/>
-                                            <p>
-                                                {{newUserFeedback}}
-                                            </p>
-                                        </div>
-                                    </form>
-                                </div>
-                                <br/>
-                                <br/>
-                                <ul id="userList">
-                                    {{#each users}}
-                                        <li>
-                                            <button type="button" class="btn btn-default btn-norounded">{{username}}</button>
-                                        </li>
-                                    {{/each}}
-                                </ul>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="btn-group pull-right" role="group">
-                                    <button type="button" class="btn btn-default disabled">{{viewUserClass}}</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href='#' id="moveToTeacher">Teacher
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='#' id="moveToClass1">Class 1
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='#' id="moveToClass2">Class 2
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='#' id="moveToClass3">Class 3
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <button type="button" class="btn btn-danger" id="deleteUser">Delete User</button>
-                                </div>
-                                <br/>
-                                <h2>{{viewUserUsername}}</h2>
-                                <h4>{{viewUserClass}}</h4>
-                                <hr/>
-                                <div id="viewUserProgChart">
-                                    <h4>Progress</h4>
-                                    {{> highchartsHelper chartId="progChart" chartObject=progChart}}
-                                </div>
-                                <hr/>
-                                <div class="row">
-                                    <div class="col-md-4" style="font-size: 80%">
-                                        <b>Overall Average</b>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <b>Recent Average</b>
-                                    </div>
-                                    <div class="col-md-4" style="font-size: 80%">
-                                        <b>Class Average</b>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4" style="font-size: 240%">
-                                        <b>{{viewUserTotalAvg}}</b>
-                                    </div>
-                                    <div class="col-md-4" style="font-size: 300%">
-                                        <b>{{viewUserRecentAvg}}</b>
-                                    </div>
-                                    <div class="col-md-4" style="font-size: 240%">
-                                        <b>{{viewUserClassAvg}}</b>
-                                    </div>
-                                </div>
-                                <hr/>
-                                <h4>Past 3 Results</h4>
-                                {{#if viewUserResults}}
-                                    {{#each item in viewUserResults}}
-                                        <div class='panel panel-default'>
-                                            <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapseUsers{{@index}}">
-                                                <div class="row">
-                                                    <h4 class='panel-title col-sm-2' id='datetime'>{{item.username}}</h4>
-                                                    <h4 class='panel-title col-sm-2' id='datetime'>{{item.class}}</h4>
-                                                    <h4 class='panel-title col-sm-4' id="datetime">{{dateconv item.date}}</h4>
-                                                    <h4 class='panel-title col-sm-2 pull-right' id="score">{{item.correct}}/10</h4>
-                                                </div>
-                                            </div>
-                                            <div id='collapseUsers{{@index}}' class='panel-collapse collapse'>
-                                                <div class='panel-body'>
-                                                    {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {{/each}}
-                                {{else}}
-                                    <h3>No results found</h3>
-                                {{/if}}
-                            </div>
-                        </div>
+  {{#if isInRole 'teacher'}}
+  <div class="row col-md-6 col-md-offset-3 centered">
+    <script>
+      $('#myTabs a').click(function(e) {
+        e.preventDefault()
+        $(this).tab('show')
+      })
+    </script>
+    <div>
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+          <a href="#users" aria-controls="users" role="tab" data-toggle="tab">Users</a>
+        </li>
+        <li role="presentation">
+          <a href="#classes" aria-controls="classes" role="tab" data-toggle="tab">Classes</a>
+        </li>
+        <li role="presentation">
+          <a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="users">
+          <div class="countainer-fluid">
+            <div class="row">
+              <div class="col-md-4" id="nopspace">
+                <div class="btn-group pull-left" role="group">
+                  <button type="button" class="btn btn-success" data-toggle="dropdown">Create User</button>
+                  <form id="new-user-form" action="action" class="dropdown-menu">
+                    <div class="input-group dropdown-padding">
+                      <input type="text" class="form-control" placeholder="Username" id="account-username" />
+                      <input type="password" class="form-control" placeholder="Password" id="account-password" />
+                      <input type="submit" id="create-account" class="btn btn-success" value="Create account" />
+                      <p>
+                        {{newUserFeedback}}
+                      </p>
                     </div>
+                  </form>
+                  <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default disabled">{{{usersSortByLabel}}}</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href='#' id="usersSortAvgScoreAsc">Total Average
+                                                    <span class="glyphicon glyphicon-chevron-up"></span>
+                                                </a>
+                      </li>
+                      <li>
+                        <a href='#' id="usersSortAvgScoreDec">Total Average
+                                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                                </a>
+                      </li>
+                      <li>
+                        <a href='#' id="usersSortRecAvgScoreAsc">Recent Average
+                                                    <span class="glyphicon glyphicon-chevron-up"></span>
+                                                </a>
+                      </li>
+                      <li>
+                        <a href='#' id="usersSortRecAvgScoreDec">Recent Average
+                                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                                </a>
+                      </li>
+                      <li>
+                        <a href='#' id="usersSortNameAsc">Name
+                                                    <span class="glyphicon glyphicon-chevron-up"></span>
+                                                </a>
+                      </li>
+                      <li>
+                        <a href='#' id="usersSortNameDec">Name
+                                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                                </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="classes">
-                    <div class="row">
-                        <div class="col-md-4 list-group">
-                            <ul class="user-list sortable1 .col-md-4">
-                                <li class="list-group-item disabled">Class 1</li>
-                                {{#each class1Users}}
-                                    <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
-                                {{/each}}
-                            </ul>
-                        </div>
-                        <div class="col-md-4 list-group">
-                            <ul class="user-list sortable2 .col-md-4">
-                                <li class="list-group-item disabled">Class 2</li>
-                                {{#each class2Users}}
-                                    <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
-                                {{/each}}
-                            </ul>
-                        </div>
-                        <div class="col-md-4 list-group">
-                            <ul class="user-list sortable3 .col-md-4">
-                                <li class="list-group-item disabled">Class 3</li>
-                                {{#each class3Users}}
-                                    <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
-                                {{/each}}
-                            </ul>
-                        </div>
+                <br/>
+                <br/>
+                <ul id="userList">
+                  {{#each users}}
+                  <li>
+                    <button type="button" class="btn btn-default btn-norounded">{{username}}</button>
+                  </li>
+                  {{/each}}
+                </ul>
+              </div>
+              <div class="col-md-8">
+                <style>
+                #userButtons div{
+                  display: inline-block;
+                }
+                </style>
+                <div class="btn-group pull-right" role="group" id="userButtons">
+                    <button type="button" class="btn btn-default disabled">{{viewUserClass}}</button>
+                    <button type="button" class="btn btn-default dropdown-toggle {{buttonDisabled}}" data-toggle="dropdown" data-target="#move-user-form" aria-haspopup="true" aria-expanded="false">
+                      <span class="caret"></span>
+                    </button>
+                    <div id="move-user-form">
+                      <ul class="dropdown-menu" id="move-user-form">
+                        <li>
+                          <a href='#' id="moveToTeacher">Teacher
+                                                  </a>
+                        </li>
+                        <li>
+                          <a href='#' id="moveToClass1">Class 1
+                                                  </a>
+                        </li>
+                        <li>
+                          <a href='#' id="moveToClass2">Class 2
+                                                  </a>
+                        </li>
+                        <li>
+                          <a href='#' id="moveToClass3">Class 3
+                                                  </a>
+                        </li>
+                      </ul>
                     </div>
+                    <button type="button" class="btn btn-warning {{buttonDisabled}}" data-target="#change-password-form" data-toggle="dropdown">Change Password</button>
+                    <div id="change-password-form">
+                      <form action="action" class="dropdown-menu change-user-form dropdown-padding">
+                        <div class="input-group">
+                          <input type="password" class="form-control" placeholder="Password" id="account-password" />
+                          <input type="submit" id="change-password" class="btn btn-success" value="Change Password" />
+                        </div>
+                      </form>
+                    </div>
+                    <button type="button" class="btn btn-danger {{buttonDisabled}}" id="deleteUser">Delete User</button>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="results">
+                <br/>
+                <h2>{{viewUserUsername}}</h2>
+                <h4>{{viewUserClass}}</h4>
+                <hr/>
+                <div id="viewUserProgChart">
+                  <h4>Progress</h4> {{> highchartsHelper chartId="progChart" chartObject=progChart}}
+                </div>
+                <hr/>
+                <div class="row">
+                  <div class="col-md-4" style="font-size: 80%">
+                    <b>Overall Average</b>
+                  </div>
+                  <div class="col-md-4">
+                    <b>Recent Average</b>
+                  </div>
+                  <div class="col-md-4" style="font-size: 80%">
+                    <b>Class Average</b>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4" style="font-size: 240%">
+                    <b>{{viewUserTotalAvg}}</b>
+                  </div>
+                  <div class="col-md-4" style="font-size: 300%">
+                    <b>{{viewUserRecentAvg}}</b>
+                  </div>
+                  <div class="col-md-4" style="font-size: 240%">
+                    <b>{{viewUserClassAvg}}</b>
+                  </div>
+                </div>
+                <hr/>
+                <h4>Recent Results</h4> {{#if viewUserResults}} {{#each item in viewUserResults}}
+                <div class='panel panel-default'>
+                  <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapseUsers{{@index}}">
                     <div class="row">
-                        <div class="col-sm-4">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="filterText" placeholder="Filter">
-                                <span class="input-group-btn">
+                      <h4 class='panel-title col-sm-2' id='datetime'>{{item.username}}</h4>
+                      <h4 class='panel-title col-sm-2' id='datetime'>{{item.class}}</h4>
+                      <h4 class='panel-title col-sm-4' id="datetime">{{dateconv item.date}}</h4>
+                      <h4 class='panel-title col-sm-2 pull-right' id="score">{{item.correct}}/10</h4>
+                    </div>
+                  </div>
+                  <div id='collapseUsers{{@index}}' class='panel-collapse collapse'>
+                    <div class='panel-body'>
+                      {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}}
+                    </div>
+                  </div>
+                </div>
+                {{/each}} {{else}}
+                <h3>No results found</h3> {{/if}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="classes">
+          <div class="row">
+            <div class="col-md-4 list-group">
+              <ul class="user-list sortable1 .col-md-4">
+                <li class="list-group-item disabled">Class 1</li>
+                {{#each class1Users}}
+                <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
+                {{/each}}
+              </ul>
+            </div>
+            <div class="col-md-4 list-group">
+              <ul class="user-list sortable2 .col-md-4">
+                <li class="list-group-item disabled">Class 2</li>
+                {{#each class2Users}}
+                <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
+                {{/each}}
+              </ul>
+            </div>
+            <div class="col-md-4 list-group">
+              <ul class="user-list sortable3 .col-md-4">
+                <li class="list-group-item disabled">Class 3</li>
+                {{#each class3Users}}
+                <li class="userlist-item list-group-item">{{> userDrag username=username}}</li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="results">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="input-group">
+                <input type="text" class="form-control" id="filterText" placeholder="Filter">
+                <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" id="filterTextClear">
                                         <span class="glyphicon glyphicon-remove-circle"></span>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="pull-left col-sm-8">
-                            <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default disabled">Show:</button>
-                                <button type="button" id="showClass1" class="btn btn-default {{showClass1state}}">Class 1</button>
-                                <button type="button" id="showClass2" class="btn btn-default {{showClass2state}}">Class 2</button>
-                                <button type="button" id="showClass3" class="btn btn-default {{showClass3state}}">Class 3</button>
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-default disabled">{{{sortByLabel}}}</button>
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a href='#' id="sortScoreAsc">Score
-                                                <span class="glyphicon glyphicon-chevron-up"></span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='#' id="sortScoreDec">Score
-                                                <span class="glyphicon glyphicon-chevron-down"></span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='#' id="sortDateAsc">Date
-                                                <span class="glyphicon glyphicon-chevron-up"></span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='#' id="sortDateDec">Date
-                                                <span class="glyphicon glyphicon-chevron-down"></span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='#' id="sortNameAsc">Name
-                                                <span class="glyphicon glyphicon-chevron-up"></span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href='#' id="sortNameDec">Name
-                                                <span class="glyphicon glyphicon-chevron-down"></span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <hr/>
-                        {{#if results}}
-                            {{#each item in results}}
-                                <div class='panel panel-default'>
-                                    <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapse{{@index}}">
-                                        <div class="row">
-                                            <h4 class='panel-title col-sm-2' id='datetime'>{{item.username}}</h4>
-                                            <h4 class='panel-title col-sm-2' id='datetime'>{{item.class}}</h4>
-                                            <h4 class='panel-title col-sm-4' id="datetime">{{dateconv item.date}}</h4>
-                                            <h4 class='panel-title col-sm-2 pull-right' id="score">{{item.correct}}/10</h4>
-                                        </div>
-                                    </div>
-                                    <div id='collapse{{@index}}' class='panel-collapse collapse'>
-                                        <div class='panel-body'>
-                                            {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}}
-                                        </div>
-                                    </div>
-                                </div>
-                            {{/each}}
-                        {{else}}
-                            <h3>No results found</h3>
-                        {{/if}}
-                    </div>
-                </div>
+                </button>
+                </span>
+              </div>
             </div>
+            <div class="pull-left col-sm-8">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-default disabled">Show:</button>
+                <button type="button" id="showClass1" class="btn btn-default {{showClass1state}}">Class 1</button>
+                <button type="button" id="showClass2" class="btn btn-default {{showClass2state}}">Class 2</button>
+                <button type="button" id="showClass3" class="btn btn-default {{showClass3state}}">Class 3</button>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-default disabled">{{{resultsSortByLabel}}}</button>
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href='#' id="resultsSortScoreAsc">Score
+                                                <span class="glyphicon glyphicon-chevron-up"></span>
+                                            </a>
+                    </li>
+                    <li>
+                      <a href='#' id="resultsSortScoreDec">Score
+                                                <span class="glyphicon glyphicon-chevron-down"></span>
+                                            </a>
+                    </li>
+                    <li>
+                      <a href='#' id="resultsSortDateAsc">Date
+                                                <span class="glyphicon glyphicon-chevron-up"></span>
+                                            </a>
+                    </li>
+                    <li>
+                      <a href='#' id="resultsSortDateDec">Date
+                                                <span class="glyphicon glyphicon-chevron-down"></span>
+                                            </a>
+                    </li>
+                    <li>
+                      <a href='#' id="resultsSortNameAsc">Name
+                                                <span class="glyphicon glyphicon-chevron-up"></span>
+                                            </a>
+                    </li>
+                    <li>
+                      <a href='#' id="resultsSortNameDec">Name
+                                                <span class="glyphicon glyphicon-chevron-down"></span>
+                                            </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <hr/> {{#if results}} {{#each item in results}}
+            <div class='panel panel-default'>
+              <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapse{{@index}}">
+                <div class="row">
+                  <h4 class='panel-title col-sm-2' id='datetime'>{{item.username}}</h4>
+                  <h4 class='panel-title col-sm-2' id='datetime'>{{item.class}}</h4>
+                  <h4 class='panel-title col-sm-4' id="datetime">{{dateconv item.date}}</h4>
+                  <h4 class='panel-title col-sm-2 pull-right' id="score">{{item.correct}}/10</h4>
+                </div>
+              </div>
+              <div id='collapse{{@index}}' class='panel-collapse collapse'>
+                <div class='panel-body'>
+                  {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}}
+                </div>
+              </div>
+            </div>
+            {{/each}} {{else}}
+            <h3>No results found</h3> {{/if}}
+          </div>
         </div>
+      </div>
     </div>
-    <style>
-        .panel-heading.accordion-toggle:after {
-            /* symbol for "opening" panels */
-            font-family: 'Glyphicons Halflings';
-            /* essential for enabling glyphicon */
-            content: "\e114";
-            /* adjust as needed, taken from bootstrap.css */
-            float: right;
-            position: relative;
-            bottom: 23px;
-            font-size: 15pt;
-            /* adjust as needed */
-            color: grey;
-            /* adjust as needed */
-        }
-        .panel-heading.accordion-toggle.collapsed:after {
-            /* symbol for "collapsed" panels */
-            content: "\e080";
-            /* adjust as needed, taken from bootstrap.css */
-        }
+  </div>
+  <style>
+    .panel-heading.accordion-toggle:after {
+      /* symbol for "opening" panels */
+      font-family: 'Glyphicons Halflings';
+      /* essential for enabling glyphicon */
+      content: "\e114";
+      /* adjust as needed, taken from bootstrap.css */
+      float: right;
+      position: relative;
+      bottom: 23px;
+      font-size: 15pt;
+      /* adjust as needed */
+      color: grey;
+      /* adjust as needed */
+    }
 
-        #datetime {
-            text-align: left;
-            float: left;
-        }
+    .panel-heading.accordion-toggle.collapsed:after {
+      /* symbol for "collapsed" panels */
+      content: "\e080";
+      /* adjust as needed, taken from bootstrap.css */
+    }
 
-        #score {
-            text-align: center;
-        }
+    #datetime {
+      text-align: left;
+      float: left;
+    }
 
-        #users li {
-            list-style-type: none;
-        }
+    #score {
+      text-align: center;
+    }
 
-        #users div {
-            padding: 0, 0, 0, 0;
-            margin: 0, 0, 0, 0;
-        }
+    #users li {
+      list-style-type: none;
+    }
 
-        .btn-norounded {
-            border-radius: 0 !important;
-            width: 100%;
-            text-align: left;
-            border-bottom: none;
-        }
+    #users div {
+      padding: 0, 0, 0, 0;
+      margin: 0, 0, 0, 0;
+    }
 
-        #userList {
-            padding-left: 0;
-            overflow-y: scroll;
-            height: 50vh;
-        }
-        #userList li:last-child .btn-norounded {
-            border-bottom: 1px solid #ccc !important;
-        }
+    .btn-norounded {
+      border-radius: 0 !important;
+      width: 100%;
+      text-align: left;
+      border-bottom: none;
+    }
 
-        #nopspace li {
-            margin: 0;
-            padding: 0;
-        }
+    #userList {
+      padding-left: 0;
+      overflow-y: scroll;
+      height: 50vh;
+    }
 
-        #progChart {
-            height: 8em;
-            width: 100%;
-        }
-        .dropdown-padding {
-            padding-left: 10%;
-            padding-right: 10%;
-        }
-        .dropdown-padding input {
-            width: 100%;
-        }
+    #userList li:last-child .btn-norounded {
+      border-bottom: 1px solid #ccc !important;
+    }
 
-    </style>
+    #nopspace li {
+      margin: 0;
+      padding: 0;
+    }
+
+    #progChart {
+      height: 8em;
+      width: 100%;
+    }
+
+    .dropdown-padding {
+      padding-left: 10%;
+      padding-right: 10%;
+    }
+
+    .dropdown-padding input {
+      width: 100%;
+    }
+  </style>
+  {{/if}}
 </template>
 
 <template name="userDrag">
-    {{username}}
+  {{username}}
 </template>
 
 <template name='debug'>
-    <div class="col-md-2 col-md-offset-5">
-        <h2>Data Generator</h2>
-        <form id='generatedata'>
-            <input type="username" id="generatedata-user"/>
-            <select id='generatedata-score'>
-                <option value=""></option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-            <input type="submit" id="generatedata-submit" value="Generate"/>
-        </form>
-        <hr/>
-        <h2>User List & Groups</h2>
-    </div>
+  <div class="col-md-2 col-md-offset-5">
+    <h2>Data Generator</h2>
+    <form id='generatedata'>
+      <input type="username" id="generatedata-user" />
+      <select id='generatedata-score'>
+        <option value=""></option>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+      <input type="submit" id="generatedata-submit" value="Generate" />
+    </form>
+    <hr/>
+    <h2>User List & Groups</h2>
+  </div>
 </template>
 
 <template name='pastresults'>
-    <div class="row col-md-6 col-md-offset-3 centered">
-        <div class='panel group'>
-            {{#if dates}}
-                <h3>Progress</h3>
-                <div id="progChart" style="height:20vh">
-                    {{> highchartsHelper chartId="progChart" chartObject=progChart}}
-                </div>
-                <hr style="margin-top: 0"/>
-                <h3>Results</h3>
-                {{#each item in dates}}
-                    <div class='panel panel-default'>
-                        <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapse{{@index}}">
-                            <h4 class='panel-title' id="datetime">
+  <div class="row col-md-6 col-md-offset-3 centered">
+    <div class='panel group'>
+      {{#if dates}}
+      <h3>Progress</h3>
+      <div id="progChart" style="height:20vh">
+        {{> highchartsHelper chartId="progChart" chartObject=progChart}}
+      </div>
+      <hr style="margin-top: 0" />
+      <h3>Results</h3> {{#each item in dates}}
+      <div class='panel panel-default'>
+        <div class='panel-heading accordion-toggle collapsed' data-toggle="collapse" data-target="#collapse{{@index}}">
+          <h4 class='panel-title' id="datetime">
                                 {{dateconv item.date}}</h4>
-                            <h4 class='panel-title' id="score">{{item.correct}}/10</h4>
-                        </div>
-                        <div id='collapse{{@index}}' class='panel-collapse collapse'>
-                            <div class='panel-body'>
-                                {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}}
-                            </div>
-                        </div>
-                    </div>
-                {{/each}}
-            {{else}}
-                <h3>You have no results yet.</h3>
-            {{/if}}
+          <h4 class='panel-title' id="score">{{item.correct}}/10</h4>
         </div>
+        <div id='collapse{{@index}}' class='panel-collapse collapse'>
+          <div class='panel-body'>
+            {{> reactiveTable collection=item.data settings=(settings item.correct) class="table table-bordered table-hover"}}
+          </div>
+        </div>
+      </div>
+      {{/each}} {{else}}
+      <h3>You have no results yet.</h3> {{/if}}
     </div>
-    <style>
-        .panel-heading.accordion-toggle:after {
-            /* symbol for "opening" panels */
-            font-family: 'Glyphicons Halflings';
-            /* essential for enabling glyphicon */
-            content: "\e114";
-            /* adjust as needed, taken from bootstrap.css */
-            float: right;
-            position: relative;
-            bottom: 23px;
-            font-size: 15pt;
-            /* adjust as needed */
-            color: grey;
-            /* adjust as needed */
-        }
-        .panel-heading.accordion-toggle.collapsed:after {
-            /* symbol for "collapsed" panels */
-            content: "\e080";
-            /* adjust as needed, taken from bootstrap.css */
-        }
+  </div>
+  <style>
+    .panel-heading.accordion-toggle:after {
+      /* symbol for "opening" panels */
+      font-family: 'Glyphicons Halflings';
+      /* essential for enabling glyphicon */
+      content: "\e114";
+      /* adjust as needed, taken from bootstrap.css */
+      float: right;
+      position: relative;
+      bottom: 23px;
+      font-size: 15pt;
+      /* adjust as needed */
+      color: grey;
+      /* adjust as needed */
+    }
 
-        #datetime {
-            text-align: left;
-            float: left;
-        }
+    .panel-heading.accordion-toggle.collapsed:after {
+      /* symbol for "collapsed" panels */
+      content: "\e080";
+      /* adjust as needed, taken from bootstrap.css */
+    }
 
-        #score {
-            text-align: center;
-        }
+    #datetime {
+      text-align: left;
+      float: left;
+    }
 
-    </style>
+    #score {
+      text-align: center;
+    }
+  </style>
 
 </template>
