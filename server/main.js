@@ -137,5 +137,10 @@ Meteor.methods({
               username: username
           });
         }
+    },
+    'changeUserPassword': function(id, newPassword){
+      Accounts.setPassword(id, newPassword, {
+        logout: false
+      });
     }
 });

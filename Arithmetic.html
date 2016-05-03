@@ -245,11 +245,11 @@
                         </li>
                       </ul>
                     </div>
-                    <button type="button" class="btn btn-warning {{buttonDisabled}}" data-target="#change-password-form" data-toggle="dropdown">Change Password</button>
-                    <div id="change-password-form">
-                      <form action="action" class="dropdown-menu change-user-form dropdown-padding">
+                    <button type="button" id="changePasswordButton" class="btn btn-warning {{buttonDisabled}}" data-target="#change-password-drop" data-toggle="dropdown">Change Password</button>
+                    <div id="change-password-drop">
+                      <form id="change-password-form" action="action" class="dropdown-menu change-user-form dropdown-padding">
                         <div class="input-group">
-                          <input type="password" class="form-control" placeholder="Password" id="account-password" />
+                          <input type="password" class="form-control" placeholder="Password" id="change-password" />
                           <input type="submit" id="change-password" class="btn btn-success" value="Change Password" />
                         </div>
                       </form>
