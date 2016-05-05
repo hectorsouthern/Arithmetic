@@ -1,4 +1,4 @@
-Data = new Mongo.Collection("data");
+Data = new Mongo.Collection("data"); //Create new Mongo collection (Opens existing collection if the name is the same)
 
 var maxQuestionNumber = 10;
 var minQuestionNumber = 1;
@@ -23,31 +23,33 @@ Accounts.onCreateUser(function(options, user) {
 
 Meteor.methods({
     'generateQuestion': function() {
-        var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
-        var questionPart2 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber);
-        var rndbool = Math.random() >= 0.5;
-        if (rndbool) {
-            return (questionPart1 + " + " + questionPart2);
-        } else {
-            return (questionPart1 + " - " + questionPart2);
+        var questionPart1 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber); //Pick a random number between the minQuestionNumber and maxQuestionNumber, rounding it to an integer
+        var questionPart2 = Math.floor(Math.random() * (maxQuestionNumber - minQuestionNumber + 1) + minQuestionNumber); //Same again for the second number in the question.
+        var operation = Math.floor(Math.random() * 3) + 1 //Pick a random number between 1 and 3
+        if (operation == 1) { //If it equals 1
+            return (questionPart1 + " + " + questionPart2); //Return the numbers and use the addition operator.
+        } else if (operation == 2) { //If it equals 2
+            return (questionPart1 + " - " + questionPart2); //Return the numbers and use the subtraction operator.
+        } else if (operation == 3) { //If it equals 3
+            return (questionPart1 + " * " + questionPart2); //Return the numbers and use the multiplication operator.
         }
     },
-    'submitAnswers': function(array, CorrectNum, userId, username) {
-        Data.insert({
-            userId: userId,
-            username: username,
-            date: new Date().toISOString(),
-            correct: CorrectNum,
-            q1: [array[0][0], array[0][1]],
-            q2: [array[1][0], array[1][1]],
-            q3: [array[2][0], array[2][1]],
-            q4: [array[3][0], array[3][1]],
-            q5: [array[4][0], array[4][1]],
-            q6: [array[5][0], array[5][1]],
-            q7: [array[6][0], array[6][1]],
-            q8: [array[7][0], array[7][1]],
-            q9: [array[8][0], array[8][1]],
-            q10: [array[9][0], array[9][1]]
+    'submitAnswers': function(array, CorrectNum, userId, username) { //Server function to insert data into the database
+        Data.insert({ //Begin a new insertion into the database named "Data" (opened at server launch)
+            userId: userId, //Store the id of the user
+            username: username, //Store the username of the user
+            date: new Date().toISOString(), //Store the date and time the user submitted their answers
+            correct: CorrectNum, //Store the number of questions correctly answered
+            q1: [array[0][0], array[0][1]], //Store the question and user's answer under the element q1
+            q2: [array[1][0], array[1][1]], //Same as above into q2
+            q3: [array[2][0], array[2][1]], //Same as above into q3
+            q4: [array[3][0], array[3][1]], //Same as above into q4
+            q5: [array[4][0], array[4][1]], //Same as above into q5
+            q6: [array[5][0], array[5][1]], //Same as above into q6
+            q7: [array[6][0], array[6][1]], //Same as above into q7
+            q8: [array[7][0], array[7][1]], //Same as above into q8
+            q9: [array[8][0], array[8][1]], //Same as above into q9
+            q10: [array[9][0], array[9][1]] //Same as above into q10
         });
         var pastResults = Data.find({
             userId: userId

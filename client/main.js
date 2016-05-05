@@ -41,11 +41,7 @@ Template.quiz.events({ //Responses to various user 'event's on the 'quiz' page
         event.preventDefault(); //Prevent the default action of the submit button (would refresh the page otherwise)
         var userAnswer = event.target.answer.value; //Get the user's answer from the text box and store as userAnswer.
         event.target.answer.value = ''; //Remove text from the text box ready for the next question.
-        if (userAnswer.length == 0) { //Check if the user has actually entered anything
-            console.log('Empty Input!'); //[DEBUG] log to clientside console that nothing has been inputted
-        } else if (userAnswer.match(/[a-z]/i)) { // Check the answer using REGEX whether or not it contains invalid (non numeric) characters
-            console.log('Invalid Input!'); //[DEBUG] Log to clientside console that invalid characters have been entered.
-        } else if (userAnswer == eval(Session.get('question'))) { //Check if the user's answer is equal to the correct answer
+        if (userAnswer == eval(Session.get('question').replace("x", "*")) && userAnswer != "") { //Check if the user's answer is equal to the correct answer
             Session.set('CorrectNum', Session.get('CorrectNum') + 1); //If so, increment the session varaible 'CorrectNum' by 1.
             $('body').removeClass('fadeout').addClass('grn'); //Remove the class 'fadeout' from the <body> (if there was one there before), and add the class 'grn'. This creates the green correct flash effect.
         } else { // If the answer was wrong
@@ -66,11 +62,11 @@ Template.quiz.events({ //Responses to various user 'event's on the 'quiz' page
 
 Template.quiz.helpers({ //When the template requests a string (Handlebars {{question}} tag will ask the client to return a string from the helper function 'question').
     'question': function() {
-        return Session.get('question'); //Return the session variable 'question'. This puts the generated question on the page and will change when the question does.
+        return Session.get('question').replace("*", "x"); //Return the session variable 'question'. This puts the generated question on the page and will change when the question does.
     },
     'questionNum': function() {
         return Session.get('questionNum'); //Return the current question number, similar as above.
-    },
+    }
 });
 
 nextQuestion = function(noincrement) { //Clientside plain JavaScript function to generate a new random question
@@ -123,6 +119,9 @@ Template.results.helpers({
                 }
             }]
         };
+    },
+    'score': function(){
+        return Session.get('CorrectNum'); //Return the score (questions answered correctly)
     }
 });
 
@@ -260,7 +259,7 @@ Template.admin.helpers({
             for (var i = 0; i < classMembers.length; i++) { //For each member of the same class
                 totalAvg = totalAvg + parseInt(classMembers[i].averageScore) //Add their average score to the total average
             }
-            return totalAvg / classMembers.length //Divide total average by number of classmembers to get the class avarage.
+            return (totalAvg / classMembers.length).toFixed(1); //Divide total average by number of classmembers to get the class avarage.
         } else {
             return "-"; //If no user selected, return a "-" to put on the page.
         }

@@ -97,7 +97,9 @@
 </template>
 
 <template name="results">
-  <div class="col-md-2 col-md-offset-5">
+  <div class="col-md-2 col-md-offset-5 centered">
+    <h2>You scored {{score}} out of 10</h2>
+    <hr />
     <h2>Results</h2> {{> reactiveTable settings=settings class="table table-bordered table-hover"}}
   </div>
 </template>
