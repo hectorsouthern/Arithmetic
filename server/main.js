@@ -1,24 +1,24 @@
 Data = new Mongo.Collection("data"); //Create new Mongo collection (Opens existing collection if the name is the same)
 
-var maxQuestionNumber = 10;
-var minQuestionNumber = 1;
+var maxQuestionNumber = 10; //Set the maximum number to be generated randomly
+var minQuestionNumber = 1; //Set the minimum question
 
-Meteor.startup(function() {
-    console.log("Loaded! :)")
+Meteor.startup(function() { //Once the server has booted fully
+    console.log("Loaded! :)") //Log to console that it is running
 });
 
-Meteor.publish("data", function() {
-    return Data.find();
+Meteor.publish("data", function() { //Publish the Data collection to the client
+    return Data.find(); //Just send all the data - not much in the way of security!
 });
 
-Meteor.publish("userList", function() {
-    return Meteor.users.find({});
+Meteor.publish("userList", function() { //Publish the full user list to the client
+    return Meteor.users.find({}); //Again, send all the users. Better secuity is probably needed but I don't have time.
 });
 
-Accounts.onCreateUser(function(options, user) {
-  user.averageScore = options.averageScore;
-  user.recentAverageScore = options.recentAverageScore;
-  return user;
+Accounts.onCreateUser(function(options, user) { //During the creation of a new user
+  user.averageScore = options.averageScore; //Make sure that the averageScore attribute is created
+  user.recentAverageScore = options.recentAverageScore; //Make sure that the totalScore element is also created.
+  return user; //Continue with creation like normal
 });
 
 Meteor.methods({
@@ -51,98 +51,97 @@ Meteor.methods({
             q9: [array[8][0], array[8][1]], //Same as above into q9
             q10: [array[9][0], array[9][1]] //Same as above into q10
         });
-        var pastResults = Data.find({
-            userId: userId
+        var pastResults = Data.find({ //Query the DB for all of that user's past results
+            userId: userId //Searching by ID
         }, {
             fields: {
-                correct: 1
+                correct: 1 //Only need the 'correct' element of the returned results
             }
         }).fetch();
-        var totalScore = 0;
-        for (var i = 0; i < pastResults.length; i++) {
-            totalScore = totalScore + pastResults[i]['correct'];
+        var totalScore = 0; //Set the total score counter to 0
+        for (var i = 0; i < pastResults.length; i++) { //For each result returned from the database
+            totalScore = totalScore + pastResults[i]['correct']; //Add the score to the total score var
         }
-        averageScore = (totalScore / pastResults.length).toFixed(1);
-        Meteor.users.update({
-            _id: userId
+        averageScore = (totalScore / pastResults.length).toFixed(1); //Divide the total score by the number of results (to get the average), then round to 1 DP.
+        Meteor.users.update({ //Update the user database object
+            _id: userId //Searching by id again
         }, {
-            $set: {
-                averageScore: averageScore
+            $set: { //Update/Set the attribute
+                averageScore: averageScore //averageScore to the average score we just worked out
             }
         });
-        pastResults = Data.find({
+        pastResults = Data.find({ //Repeat the query for the recent average
             userId: userId
         }, {
             fields: {
                 correct: 1
             },
-            limit: 3
+            limit: 3 //Limit results to 3 most recent
         }).fetch();
-        totalScore = 0;
-        for (var i = 0; i < pastResults.length; i++) {
-            totalScore = totalScore + pastResults[i]['correct'];
+        totalScore = 0; //Reset the total score counter back to 0
+        for (var i = 0; i < pastResults.length; i++) { //For each result (incase there are less than 3)
+            totalScore = totalScore + pastResults[i]['correct']; //Add the score to the total score
         }
-        averageScore = (totalScore / pastResults.length).toFixed(1);
-        Meteor.users.update({
-            _id: userId
+        averageScore = (totalScore / pastResults.length).toFixed(1); //Same again - calculate the average score to 1DP.
+        Meteor.users.update({ //Find and update the user object
+            _id: userId //Searching by ID
         }, {
             $set: {
-                recentAverageScore: averageScore
+                recentAverageScore: averageScore //Set the recentAverageScore attribute to the score we just calculated
             }
         });
     },
-    'createNewUser': function(username, password, role) {
-        var id = Accounts.createUser({
-            username: username,
-            password: password,
-            averageScore: 0,
-            recentAverageScore: 0
+    'createNewUser': function(username, password, role) { //Create a new user from the given parameters
+        var id = Accounts.createUser({ //Calling the built in createUser function
+            username: username, //Set their username to the argument given
+            password: password, //Set their password to the argument given
+            averageScore: 0, //Set their averageScore to 0, as they haven't comleted any results yet
+            recentAverageScore: 0 //Set their recentAverageScore to 0, as they haven't' calculated any results yet.
         });
-        if (role != null) {
-            Roles.addUsersToRoles(id, role);
-        } else {
-            Roles.addUsersToRoles(id, "Class 1");
+        if (role != null) { //If no role has been given to the function
+            Roles.addUsersToRoles(id, role); //Add the user to the given role
+        } else { //If no role has been provided
+            Roles.addUsersToRoles(id, "Class 1"); //Just add them to Class 1.
         }
         return id;
     },
-    'getRolesForUser': function(id) {
-        return Roles.getRolesForUser(id);
+    'getRolesForUser': function(id) { //Return the role(s) for a given user
+        return Roles.getRolesForUser(id); //Return straight from the Roles function
     },
-    'moveUserToRole': function(username, role) {
-        //TODO errors
-        var user = Accounts.findUserByUsername(username);
-        Roles.removeUsersFromRoles(user, Roles.getRolesForUser(user));
-        Roles.addUsersToRoles(user, role);
+    'moveUserToRole': function(username, role) { //Move a user to a specified role
+        var user = Accounts.findUserByUsername(username); //Find the actual user object (required by Roles)
+        Roles.removeUsersFromRoles(user, Roles.getRolesForUser(user)); //Remove the user from any roles they are in
+        Roles.addUsersToRoles(user, role); //Then add them to the given role
     },
-    'generateUserData': function(username, score) {
-        if (score == "") {
-            score = Math.floor(Math.random() * 11);
+    'generateUserData': function(username, score) { //Generate random data for the user (used for debugging/demostration)
+        if (score == "") { //If a manual score override has not been given
+            score = Math.floor(Math.random() * 11); //Generate a random score between 1 and 10.
         }
-        var answerLog = []
-        var question;
-        for (var i = 0; i < score; i++) {
-            question = Meteor.call('generateQuestion');
-            answerLog.push([question, eval(question)]);
+        var answerLog = [] //Create a new answeLog array (similar to the Session variable but entirely local)
+        var question; //Create a new question
+        for (var i = 0; i < score; i++) { //For whatever score we want the user to get
+            question = Meteor.call('generateQuestion'); //Generate a question from the generateQuestion function
+            answerLog.push([question, eval(question)]); //Push the question and then calculate the answer and push that too.
         }
-        for (var j = 0; j < 10 - i; j++) {
-            question = Meteor.call('generateQuestion');
-            answerLog.push([question, eval(question) + 1]);
+        for (var j = 0; j < 10 - i; j++) { //For the rest of the questions (the ones we want to get wrong)
+            question = Meteor.call('generateQuestion'); //Generate another question
+            answerLog.push([question, eval(question) + 1]); //And push the question, and then a wrong answer, to the array)
         }
-        Meteor.call('submitAnswers', answerLog, score, Accounts.findUserByUsername(username)._id, username);
+        Meteor.call('submitAnswers', answerLog, score, Accounts.findUserByUsername(username)._id, username); //Submit the answerLog like normal using the submitAnswers function
     },
-    'deleteUser': function(username) {
-        if(username != 'admin'){
-          Data.remove({
-              username: username
+    'deleteUser': function(username) { //Delete a given user (by username)
+        if(username != 'admin'){ //Disallow deletion of the 'admin' account, to prevent lockout
+          Data.remove({ //Delete all stored result data
+              username: username //Searching by username
           });
-          Meteor.users.remove({
-              username: username
+          Meteor.users.remove({ //Delete the actual user object from the DB.
+              username: username //Again, searching by username
           });
         }
     },
-    'changeUserPassword': function(id, newPassword){
-      Accounts.setPassword(id, newPassword, {
-        logout: false
+    'changeUserPassword': function(id, newPassword){ //Change the password of a given user to a given password
+      Accounts.setPassword(id, newPassword, { //Use the built in setPassword function
+        logout: false //Don't log the user out if they are currently logged in (to prevent page refresh)
       });
     }
 });
