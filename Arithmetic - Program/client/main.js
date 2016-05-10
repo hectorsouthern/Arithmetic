@@ -547,14 +547,13 @@ Template.admin.created = function() { //When the admin page is first called, res
 }
 
 Template.userDrag.rendered = function(e, t) {
-    $(document).ready(function() { //After Handlebars has populated the DOM with each user in the class management page
+        console.log("rendered2");
         $('.sortable1, .sortable2, .sortable3').sortable({ //Run the sortable plugin on each class, so users can be dragged between classes.
             connectWith: '.connected', //Connect each class together so users can be dragged between them.
             items: ':not(.disabled)' //Any item without the .disabled class can be dragged (so call the users, but not the headings)
         }).bind('sortupdate', function(e, ui) {
             Meteor.call('moveUserToRole', ui.item[0]['textContent'], ui.endparent[0]['outerText'].split("\n")[0]); //After user has finished moving users between classes, call the Server function to moveUserToRole, passing the username and the target group.
         });
-    })
 }
 
 

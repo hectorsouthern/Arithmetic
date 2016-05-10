@@ -4,6 +4,11 @@ var maxQuestionNumber = 10; //Set the maximum number to be generated randomly
 var minQuestionNumber = 1; //Set the minimum question
 
 Meteor.startup(function() { //Once the server has booted fully
+    if (Accounts.findUserByUsername("admin") == null){
+      console.log("No admin user present! Creating now...");
+      Meteor.call('createNewUser', "admin", "admin", "teacher")
+      console.log("Admin created - username: admin, password: admin");
+    }
     console.log("Loaded! :)") //Log to console that it is running
 });
 
